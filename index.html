@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aline Souza — Desenvolvedora de Software</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="letra-a.png" >
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --branco:     #ffffff;
+  --cinza-1:    #f7f7f7;
+  --cinza-2:    #eeeeee;
+  --cinza-3:    #dddddd;
+  --cinza-4:    #aaaaaa;
+  --cinza-5:    #777777;
+  --cinza-6:    #444444;
+  --preto:      #111111;
+  --verde:      #22c55e;
+  --verde-esc:  #16a34a;
+  --fonte-disp: 'DM Serif Display', serif;
+  --fonte-body: 'DM Sans', sans-serif;
+  --fonte-mono: 'Space Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--fonte-body);
+  background: var(--branco);
+  color: var(--preto);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR */
+.cursor {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--verde); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease;
+}
+.cursor-ring {
+  position: fixed; width: 32px; height: 32px;
+  border: 1.5px solid rgba(34,197,94,0.5); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s;
+}
+body:has(a:hover) .cursor-ring,
+body:has(button:hover) .cursor-ring { width: 48px; height: 48px; border-color: var(--verde); }
+
+/* NAVBAR */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 6%;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(255,255,255,0.90); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--cinza-2);
+}
+.nav-logo {
+  font-family: var(--fonte-mono); font-size: 13px;
+  color: var(--verde); letter-spacing: 0.1em; text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--cinza-5); text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--preto); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; padding: 120px 6% 80px;
+  display: grid; grid-template-columns: 1fr 420px;
+  gap: 80px; align-items: center; position: relative;
+}
+.hero::after {
+  content: ''; position: absolute; top: 10%; right: 0;
+  width: 40%; height: 80%;
+  background: radial-gradient(ellipse at center, rgba(34,197,94,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: var(--fonte-mono); font-size: 11px; color: var(--verde);
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--verde); }
+.hero-nome {
+  font-family: var(--fonte-disp); font-size: clamp(42px, 5.5vw, 78px);
+  line-height: 1.0; color: var(--preto); margin-bottom: 8px;
+}
+.hero-nome em { font-style: italic; color: var(--cinza-4); }
+.hero-titulo {
+  font-family: var(--fonte-disp); font-size: clamp(16px, 1.8vw, 24px);
+  font-style: italic; color: var(--verde); margin-bottom: 32px; line-height: 1.3;
+}
+.hero-bio {
+  font-size: 14.5px; color: var(--cinza-5); line-height: 1.8;
+  max-width: 560px; margin-bottom: 48px;
+}
+.hero-contatos { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+.hero-contato-item {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--fonte-mono); font-size: 12px; color: var(--cinza-4);
+}
+.hero-contato-item a { color: var(--cinza-4); text-decoration: none; transition: color 0.2s; }
+.hero-contato-item a:hover { color: var(--verde); }
+.hero-contato-item svg { color: var(--verde); flex-shrink: 0; }
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn-primario {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 28px; background: var(--verde); color: var(--branco);
+  font-family: var(--fonte-body); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+  border-radius: 2px; transition: background 0.2s, transform 0.2s;
+  border: none; cursor: none;
+}
+.btn-primario:hover { background: var(--verde-esc); transform: translateY(-2px); }
+
+.btn-secundario {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 28px; background: transparent; color: var(--preto);
+  font-family: var(--fonte-body); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+  border-radius: 2px; border: 1px solid var(--cinza-3);
+  transition: border-color 0.2s, color 0.2s, transform 0.2s; cursor: none;
+}
+.btn-secundario:hover { border-color: var(--preto); transform: translateY(-2px); }
+
+.hero-foto-wrap { position: relative; display: flex; justify-content: center; }
+.hero-foto-frame { position: relative; width: 360px; height: 460px; }
+.hero-foto-frame::before {
+  content: ''; position: absolute; top: 16px; left: 16px; right: -16px; bottom: -16px;
+  border: 1px solid rgba(34,197,94,0.3); border-radius: 2px; z-index: 0;
+}
+.hero-foto-frame img {
+  position: relative; z-index: 1; width: 100%; height: 100%;
+  object-fit: cover; object-position: center top; border-radius: 2px; display: block;
+}
+.hero-foto-badge {
+  position: absolute; bottom: -20px; left: -20px; z-index: 2;
+  background: var(--verde); color: var(--branco);
+  font-family: var(--fonte-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 16px; border-radius: 2px;
+}
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 48px; padding-top: 40px;
+  border-top: 1px solid var(--cinza-2);
+}
+.stat-num { font-family: var(--fonte-disp); font-size: 36px; color: var(--preto); line-height: 1; margin-bottom: 4px; }
+.stat-num span { color: var(--verde); }
+.stat-label { font-size: 11px; color: var(--cinza-4); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ═══════════════════════════════════════
+   PROJETOS — GRID CORRIGIDO
+   2 colunas simétricas, sem posicionamento
+   manual de grid-column/grid-row
+═══════════════════════════════════════ */
+.projetos {
+  padding: 100px 6%; position: relative; background: var(--cinza-1);
+}
+.secao-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 64px; gap: 24px;
+}
+.secao-tag {
+  font-family: var(--fonte-mono); font-size: 11px; color: var(--verde);
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.secao-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--verde); }
+.secao-titulo {
+  font-family: var(--fonte-disp); font-size: clamp(30px, 3.5vw, 52px);
+  line-height: 1.05; color: var(--preto);
+}
+.secao-titulo em { font-style: italic; color: var(--cinza-4); }
+.secao-desc {
+  font-size: 13.5px; color: var(--cinza-5); line-height: 1.7;
+  max-width: 360px; text-align: right;
+}
+
+/* ★ GRID CORRIGIDO — 2 colunas iguais, 2 linhas, sem magic numbers */
+.projetos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* sempre 2 colunas iguais */
+  gap: 20px;                               /* espaço entre cards */
+}
+
+.projeto-card {
+  position: relative; overflow: hidden;
+  aspect-ratio: 16/10;                    /* todos mesmos proporções */
+  background: var(--cinza-2); cursor: none;
+  border-radius: 4px;
+  /* sem grid-column/grid-row manual — deixa o flow automático */
+}
+
+.projeto-img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  display: block; filter: brightness(0.88);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}
+.projeto-card:hover .projeto-img { filter: brightness(0.75); transform: scale(1.04); }
+
+.projeto-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.88) 0%, rgba(10,10,10,0.1) 50%, transparent 100%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 28px 32px; transition: background 0.4s;
+}
+.projeto-num { font-family: var(--fonte-mono); font-size: 10px; color: var(--verde); letter-spacing: 0.2em; margin-bottom: 8px; }
+.projeto-nome { font-family: var(--fonte-disp); font-size: clamp(18px, 2vw, 28px); color: #ffffff; margin-bottom: 6px; line-height: 1.1; }
+.projeto-tipo { font-size: 11.5px; color: rgba(255,255,255,0.65); letter-spacing: 0.08em; margin-bottom: 16px; }
+.projeto-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--verde); text-decoration: none;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.projeto-link svg { transition: transform 0.2s; }
+.projeto-link:hover svg { transform: translateX(4px); }
+.projeto-card:hover .projeto-link { opacity: 1; transform: translateY(0); }
+.projeto-tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+  opacity: 0; transition: opacity 0.3s ease 0.05s;
+}
+.projeto-card:hover .projeto-tags { opacity: 1; }
+.projeto-tag {
+  font-family: var(--fonte-mono); font-size: 9px;
+  color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15); padding: 3px 8px;
+  border-radius: 2px; letter-spacing: 0.1em;
+}
+
+/* SOBRE */
+.sobre {
+  padding: 100px 6%; border-top: 1px solid var(--cinza-2);
+  display: grid; grid-template-columns: 1fr 1.2fr;
+  gap: 80px; align-items: center; background: var(--branco);
+}
+.sobre-skills {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 40px;
+}
+.skill-pill {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  background: var(--cinza-1); border: 1px solid var(--cinza-2); border-radius: 2px;
+  font-size: 12px; color: var(--cinza-6);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.skill-pill:hover { border-color: var(--verde); color: var(--preto); background: var(--branco); }
+.skill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--verde); flex-shrink: 0; }
+.sobre-texto p { font-size: 14.5px; color: var(--cinza-5); line-height: 1.8; margin-bottom: 20px; }
+.sobre-texto p strong { color: var(--preto); font-weight: 600; }
+
+/* CONTATO */
+.contato-final {
+  padding: 100px 6%; border-top: 1px solid var(--cinza-2);
+  text-align: center; position: relative; overflow: hidden;
+  background: var(--cinza-1);
+}
+.contato-final::before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.contato-grande {
+  font-family: var(--fonte-disp); font-size: clamp(36px, 6vw, 88px);
+  line-height: 1.0; color: var(--preto); margin-bottom: 24px;
+}
+.contato-grande em { font-style: italic; color: var(--cinza-4); }
+.contato-sub {
+  font-size: 14px; color: var(--cinza-5); margin-bottom: 48px;
+  max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7;
+}
+.contato-infos {
+  display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 40px;
+}
+.contato-info-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.contato-info-label {
+  font-family: var(--fonte-mono); font-size: 10px; color: var(--cinza-4);
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+.contato-info-valor { font-size: 13px; color: var(--cinza-6); }
+.contato-info-valor a { color: var(--cinza-6); text-decoration: none; transition: color 0.2s; }
+.contato-info-valor a:hover { color: var(--verde); }
+
+/* FOOTER */
+footer {
+  padding: 28px 6%; border-top: 1px solid var(--cinza-2);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px; background: var(--branco);
+}
+.footer-copy { font-family: var(--fonte-mono); font-size: 11px; color: var(--cinza-4); }
+.footer-feito {
+  font-family: var(--fonte-mono); font-size: 11px; color: var(--cinza-4);
+  display: flex; align-items: center; gap: 6px;
+}
+.footer-feito span { color: var(--verde); }
+
+/* WHATSAPP */
+.whatsapp-float {
+  position: fixed; bottom: 28px; right: 28px; z-index: 500;
+  width: 56px; height: 56px; background: #25d366; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 28px rgba(37,211,102,0.35); text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s; cursor: none;
+}
+.whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 12px 36px rgba(37,211,102,0.5); }
+.whatsapp-float svg { width: 28px; height: 28px; }
+.whatsapp-pulse {
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid rgba(37,211,102,0.4);
+  animation: waPulse 2s ease-in-out infinite;
+}
+@keyframes waPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0; }
+}
+
+/* FADE UP */
+.fade-up { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; gap: 48px; padding-top: 100px; }
+  .hero-foto-wrap { order: -1; }
+  .hero-foto-frame { width: 280px; height: 360px; margin: 0 auto; }
+
+  /* projetos: 1 coluna em telas menores */
+  .projetos-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  .sobre { grid-template-columns: 1fr; gap: 48px; }
+  .secao-header { flex-direction: column; align-items: flex-start; }
+  .secao-desc { text-align: left; }
+  nav .nav-links { display: none; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+
+@media (max-width: 560px) {
+  .sobre-skills { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; }
+  .btn-primario, .btn-secundario { justify-content: center; }
+  .contato-infos { flex-direction: column; align-items: center; }
+}
+
+.linha-deco {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, transparent, var(--cinza-3), transparent);
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<a href="https://wa.me/5511942125982" target="_blank" class="whatsapp-float" aria-label="Falar no WhatsApp">
+  <div class="whatsapp-pulse"></div>
+  <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.109.549 4.09 1.508 5.814L.057 23.882a.5.5 0 0 0 .611.611l6.087-1.456A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.951 9.951 0 0 1-5.068-1.382l-.361-.214-3.742.895.912-3.629-.235-.374A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+</a>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">AS — Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-conteudo">
+    <p class="hero-tag">Desenvolvedora de Software</p>
+    <h1 class="hero-nome">Aline<br><em>Souza</em></h1>
+    <p class="hero-titulo">Cientista da Computação &amp; Desenvolvedora de Software</p>
+    <p class="hero-bio">
+      Sou uma entusiasta da computação desde muito cedo. Meu primeiro contato com um computador ocorreu aos 7 anos e, desde então, soube que esse seria o meu futuro. Hoje, meus dias são preenchidos com linhas de código e com a constante busca por conhecimento — desenvolvendo aplicações e sistemas que impactam positivamente a vida das pessoas.
+    </p>
+    <div class="hero-contatos">
+      <div class="hero-contato-item">
+        <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><rect x="2" y="4" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwQlmqhXwTVrCbXqCVRfKcXqrfnqPdsqXxnLQfThHwsthRpkqwBmthjbRGvcvQBgwjKMpg" rel="stylesheet">alinesouzaparacontato@gmail.com</a>
+      </div>
+      <div class="hero-contato-item">
+        <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M3 4.5C3 4.5 4.2 3.2 5.4 3.2s2 1.7 2.4 2.9c.3 1-.4 1.7-.4 1.7s.8 1.7 2 3 3 2 3 2 .6-.7 1.7-.4c1.2.4 2.9 1.4 2.9 2.5S16.5 16.5 16.5 16.5C10 17.5 2.5 10 3 4.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a href="https://wa.me/5511942125982" target="_blank">(11) 94212-5982</a>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#projetos" class="btn-primario">
+        Ver projetos
+        <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwQlmqhXwTVrCbXqCVRfKcXqrfnqPdsqXxnLQfThHwsthRpkqwBmthjbRGvcvQBgwjKMpg" class="btn-secundario" rel="stylesheet">Entrar em contato</a>
+    </div>
+  </div>
+
+  <div class="hero-foto-wrap">
+    <div class="hero-foto-frame">
+      <img src="aline.png" alt="Aline Souza — Desenvolvedora de Software">
+      <div class="hero-foto-badge">Disponível para projetos</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section class="projetos" id="projetos">
+  <div class="secao-header fade-up">
+    <div>
+      <p class="secao-tag">Trabalhos selecionados</p>
+      <h2 class="secao-titulo">Projetos<br><em>desenvolvidos</em></h2>
+    </div>
+    <p class="secao-desc">Sites e sistemas construídos com atenção aos detalhes, performance e experiência do usuário.</p>
+  </div>
+
+  <!-- ★ GRID CORRIGIDO: 2x2 simétrico, flow automático -->
+  <div class="projetos-grid">
+    <div class="projeto-card fade-up">
+      <img class="projeto-img" src="amendoeira.png" alt="Amendoeira Orgânica">
+      <div class="projeto-overlay">
+        <p class="projeto-num">01 / E-commerce</p>
+        <h3 class="projeto-nome">Amendoeira Orgânica</h3>
+        <p class="projeto-tipo">Loja virtual de produtos naturais</p>
+        <div class="projeto-tags">
+          <span class="projeto-tag">WooCommerce</span>
+          <span class="projeto-tag">WordPress</span>
+          <span class="projeto-tag">PHP</span>
+        </div>
+        <a href="https://amendoeiraorganica.com.br" target="_blank" class="projeto-link">Ver projeto <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="projeto-card fade-up">
+      <img class="projeto-img" src="dentista.png" alt="Dr. Ivan Rodrigues">
+      <div class="projeto-overlay">
+        <p class="projeto-num">02 / Landing Page</p>
+        <h3 class="projeto-nome">Dr. Ivan Rodrigues</h3>
+        <p class="projeto-tipo">Site institucional para dentista</p>
+        <div class="projeto-tags">
+          <span class="projeto-tag">HTML</span>
+          <span class="projeto-tag">CSS</span>
+          <span class="projeto-tag">JavaScript</span>
+        </div>
+        <a href="https://dentista-ivan-rodrigues.vercel.app/" target="_blank" class="projeto-link">Ver projeto <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="projeto-card fade-up">
+      <img class="projeto-img" src="moveis.png" alt="Móveis Uberlândia">
+      <div class="projeto-overlay">
+        <p class="projeto-num">03 / E-commerce</p>
+        <h3 class="projeto-nome">Móveis Uberlândia</h3>
+        <p class="projeto-tipo">Loja de móveis e decoração</p>
+        <div class="projeto-tags">
+          <span class="projeto-tag">React</span>
+          <span class="projeto-tag">Next.js</span>
+          <span class="projeto-tag">Vercel</span>
+        </div>
+        <a href="https://moveis-uberlandia.vercel.app/" target="_blank" class="projeto-link">Ver projeto <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="projeto-card fade-up">
+      <img class="projeto-img" src="petShop.png" alt="Pet Shop Souza">
+      <div class="projeto-overlay">
+        <p class="projeto-num">04 / Landing Page</p>
+        <h3 class="projeto-nome">Pet Shop Souza</h3>
+        <p class="projeto-tipo">Site para pet shop com múltiplas unidades</p>
+        <div class="projeto-tags">
+          <span class="projeto-tag">HTML</span>
+          <span class="projeto-tag">CSS</span>
+          <span class="projeto-tag">JavaScript</span>
+          <span class="projeto-tag">Vercel</span>
+        </div>
+        <a href="https://pet-shop-souza.vercel.app/" target="_blank" class="projeto-link">Ver projeto <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="linha-deco"></div>
+
+<!-- SOBRE -->
+<section class="sobre" id="sobre">
+  <div class="fade-up">
+    <p class="secao-tag">Sobre mim</p>
+    <h2 class="secao-titulo" style="margin-bottom: 32px;">Código com<br><em>propósito</em></h2>
+    <div class="sobre-skills">
+      <div class="skill-pill"><span class="skill-dot"></span>HTML & CSS</div>
+      <div class="skill-pill"><span class="skill-dot"></span>JavaScript</div>
+      <div class="skill-pill"><span class="skill-dot"></span>React</div>
+      <div class="skill-pill"><span class="skill-dot"></span>Next.js</div>
+      <div class="skill-pill"><span class="skill-dot"></span>WordPress</div>
+      <div class="skill-pill"><span class="skill-dot"></span>WooCommerce</div>
+      <div class="skill-pill"><span class="skill-dot"></span>UI/UX Design</div>
+      <div class="skill-pill"><span class="skill-dot"></span>Figma</div>
+      <div class="skill-pill"><span class="skill-dot"></span>Python</div>
+      <div class="skill-pill"><span class="skill-dot"></span>Git & GitHub</div>
+    </div>
+  </div>
+  <div class="sobre-texto fade-up">
+    <p>Sou <strong>Aline Souza</strong>, Cientista da Computação e Desenvolvedora de Software. Meu primeiro contato com computador foi aos 7 anos e, desde então, soube que esse seria o meu futuro.</p>
+    <p>Foi durante o meu curso na <strong>ETEC</strong> que mergulhei de forma intensa no fascinante mundo da programação, ampliando significativamente meus conhecimentos e habilidades.</p>
+    <p>Hoje, meus dias são preenchidos com linhas de código e com a constante busca por conhecimento. Sou apaixonada por desenvolver aplicações e sistemas que <strong>impactam positivamente a vida das pessoas</strong> e a eficiência dos negócios.</p>
+    <div style="margin-top: 36px; display: flex; gap: 16px;">
+      <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwQlmqhXwTVrCbXqCVRfKcXqrfnqPdsqXxnLQfThHwsthRpkqwBmthjbRGvcvQBgwjKMpg" class="btn-primario">Falar comigo</a>
+    </div>
+  </div>
+</section>
+
+<div class="linha-deco"></div>
+
+<!-- CONTATO -->
+<section class="contato-final" id="contato">
+  <p class="secao-tag" style="justify-content: center; margin-bottom: 24px;">Vamos trabalhar juntos</p>
+  <h2 class="contato-grande">Tem um projeto<br><em>em mente?</em></h2>
+  <p class="contato-sub">Estou disponível para novos projetos freelance e oportunidades. Vamos criar algo incrível juntos!</p>
+  <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwQlmqhXwTVrCbXqCVRfKcXqrfnqPdsqXxnLQfThHwsthRpkqwBmthjbRGvcvQBgwjKMpg" class="btn-primario" style="margin: 0 auto; display: inline-flex;">
+    Enviar e-mail
+    <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <div class="contato-infos">
+    <div class="contato-info-item">
+      <span class="contato-info-label">E-mail</span>
+      <span class="contato-info-valor"><a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHwQlmqhXwTVrCbXqCVRfKcXqrfnqPdsqXxnLQfThHwsthRpkqwBmthjbRGvcvQBgwjKMpg" rel="stylesheet">alinesouzaparacontato@gmail.com</a></span>
+    </div>
+    <div class="contato-info-item">
+      <span class="contato-info-label">WhatsApp</span>
+      <span class="contato-info-valor"><a href="https://wa.me/5511942125982" target="_blank">(11) 94212-5982</a></span>
+    </div>
+    <div class="contato-info-item">
+      <span class="contato-info-label">Localização</span>
+      <span class="contato-info-valor">São Paulo, BR</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-copy">© 2025 Aline Souza — Todos os direitos reservados</p>
+  <p class="footer-feito">Desenvolvido com <span>♥</span> e muito código</p>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+const fadeEls = document.querySelectorAll('.fade-up');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+fadeEls.forEach(el => io.observe(el));
+
+document.querySelectorAll('.projeto-card').forEach((c, i) => {
+  c.style.transitionDelay = (i * 0.1) + 's';
+});
+</script>
+</body>
+</html>
